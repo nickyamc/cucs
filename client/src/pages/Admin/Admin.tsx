@@ -9,50 +9,40 @@ const { Header, Sider, Content } = Layout;
 const Admin: React.FC = () => {
 	const [collapset, setCollapset] = useState(false);
 	return (
-		<ConfigProvider
-			theme={{
-				algorithm: theme.defaultAlgorithm,
-				token: { colorPrimary: "#ff4187" },
-			}}
-		>
-			<Layout style={{ height: "100vh" }}>
-				<Sider
-					theme="light"
-					trigger={null}
-					collapsible
-					collapsed={collapset}
-					style={{ boxShadow: "-2px 0px 15px 1px rgba(0,0,0,0.30)" }}
-				>
-					<SiderSection collapset={collapset} />
-				</Sider>
-				<Layout>
-					<ConfigProvider theme={{ algorithm: theme.compactAlgorithm }}>
-						<Header
-							style={{
-								background: "#fff",
-								boxShadow: "10px -2px 15px 1px rgba(0,0,0,0.30)",
-								zIndex: 1,
-								paddingInline: "20px",
-							}}
-						>
-							<HeaderSection
-								setCollapset={setCollapset}
-								collapset={collapset}
-							/>
-						</Header>
-					</ConfigProvider>
-					<Content
+		<Layout style={{ height: "100vh" }}>
+			<Sider
+				theme="light"
+				trigger={null}
+				collapsible
+				collapsed={collapset}
+				style={{ boxShadow: "-2px 0px 15px 1px rgba(0,0,0,0.30)" }}
+			>
+				<SiderSection collapset={collapset} />
+			</Sider>
+			<Layout>
+				<ConfigProvider theme={{ algorithm: theme.compactAlgorithm }}>
+					<Header
 						style={{
-							backgroundImage: "url('src/assets/imgs/pusharo.png')",
-							backgroundRepeat: "repeat",
-							backgroundSize: "400px",
+							background: "#fff",
+							boxShadow: "10px -2px 15px 1px rgba(0,0,0,0.30)",
+							zIndex: 1,
+							paddingInline: "20px",
 						}}
 					>
-						<Outlet />
-					</Content>
-				</Layout>
+						<HeaderSection setCollapset={setCollapset} collapset={collapset} />
+					</Header>
+				</ConfigProvider>
+				<Content
+					style={{
+						backgroundImage: "url('src/assets/imgs/pusharo.png')",
+						backgroundRepeat: "repeat",
+						backgroundSize: "400px",
+					}}
+				>
+					<Outlet />
+				</Content>
 			</Layout>
-		</ConfigProvider>
+		</Layout>
 	);
 };
 
