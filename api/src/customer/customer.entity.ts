@@ -27,7 +27,7 @@ export class Customer {
 	})
 	type: CustomerType;
 
-	@Column({ name: 'student_code' })
+	@Column({ name: 'student_code', unique: true })
 	studentCode: string;
 
 	@Column({ name: 'qr_code', unique: true })

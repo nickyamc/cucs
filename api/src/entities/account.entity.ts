@@ -1,10 +1,10 @@
 import { Column } from 'typeorm';
 
 export class Account {
-	@Column()
+	@Column({ length: 100, unique: true })
 	email: string;
 
-	@Column({ length: 15 })
+	@Column({ length: 15, unique: true })
 	username: string;
 
 	@Column({ type: 'text' })

@@ -16,8 +16,8 @@ export class Lab {
 	@PrimaryGeneratedColumn()
 	id: number;
 
-	@Column({ length: 20 })
-	code: string;
+	@Column({ length: 20, unique: true })
+	suneduCode: string;
 
 	@Column()
 	location: string;
