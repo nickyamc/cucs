@@ -1,4 +1,10 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+	Column,
+	Entity,
+	JoinColumn,
+	ManyToOne,
+	PrimaryGeneratedColumn,
+} from 'typeorm';
 import { UserRole } from './enums';
 import { DateColumn } from 'src/entities/dateColumn.entity';
 import { Account } from 'src/entities/account.entity';
@@ -35,5 +41,6 @@ export class User {
 	dateColumn: DateColumn;
 
 	@ManyToOne(() => Lab, (lab) => lab.users)
+	@JoinColumn({ name: 'lab_id' })
 	lab: Lab;
 }

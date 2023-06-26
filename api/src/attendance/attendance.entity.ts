@@ -6,6 +6,7 @@ import {
 	Column,
 	Entity,
 	Generated,
+	JoinColumn,
 	ManyToOne,
 	PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -23,11 +24,14 @@ export class Attendance {
 	dateColumn: DateColumn;
 
 	@ManyToOne(() => Customer, (customer) => customer.attendances)
+	@JoinColumn({ name: 'customer_id' })
 	customer: Customer;
 
 	@ManyToOne(() => Lab, (lab) => lab.attendances)
+	@JoinColumn({ name: 'lab_id' })
 	lab: Lab;
 
-	@ManyToOne(() => Evento, (evento) => evento.attendances)
+	@ManyToOne(() => Evento, (event) => event.attendances)
+	@JoinColumn({ name: 'event_id' })
 	event: Evento;
 }
