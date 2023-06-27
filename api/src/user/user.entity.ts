@@ -15,7 +15,7 @@ export class User {
 	@PrimaryGeneratedColumn()
 	id: number;
 
-	@Column(() => Account)
+	@Column(() => Account, { prefix: false })
 	account: Account;
 
 	@Column({
@@ -34,10 +34,13 @@ export class User {
 	@Column({ type: 'date' })
 	birthdate: Date;
 
+	// @Column({ name: 'lab_id' })
+	// labId: number;
+
 	@Column({ name: 'is_active', default: false })
 	isActive: boolean;
 
-	@Column(() => DateColumn)
+	@Column(() => DateColumn, { prefix: false })
 	dateColumn: DateColumn;
 
 	@ManyToOne(() => Lab, (lab) => lab.users)

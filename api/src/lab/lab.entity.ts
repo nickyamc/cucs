@@ -16,7 +16,7 @@ export class Lab {
 	@PrimaryGeneratedColumn()
 	id: number;
 
-	@Column({ length: 20, unique: true })
+	@Column({ name: 'sunedu_code', length: 20, unique: true })
 	suneduCode: string;
 
 	@Column()
@@ -26,7 +26,7 @@ export class Lab {
 	@Generated('uuid')
 	qrCode: string;
 
-	@Column(() => DateColumn)
+	@Column(() => DateColumn, { prefix: false })
 	dateColumn: DateColumn;
 
 	@OneToMany(() => User, (user) => user.lab)

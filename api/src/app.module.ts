@@ -18,23 +18,20 @@ import configuration from './config/configuration';
 
 @Module({
 	imports: [
-		ConfigModule.forRoot({
-			envFilePath: `${process.cwd()}/.env.${process.env.NODE_ENV}`,
-			load: [configuration],
-			isGlobal: true,
-		}),
 		TypeOrmModule.forRootAsync({
 			imports: [ConfigModule],
 			useFactory: async (configureService: ConfigService) => ({
 				type: 'mysql',
 				host: configureService.get<string>('database.host'),
-				port: configureService.get('database.port'),
+				port: configureService.get<number>('database.port'),
 				username: configureService.get<string>('database.username'),
 				password: configureService.get<string>('database.password'),
 				database: configureService.get<string>('database.database'),
 				entities: [User, Customer, Evento, Lab, Attendance],
 				synchronize: true,
+				dropSchema: true,
 			}),
+			inject: [ConfigService],
 		}),
 		LabModule,
 		EventModule,
@@ -42,6 +39,11 @@ import configuration from './config/configuration';
 		CustomerModule,
 		AuthModule,
 		AttendanceModule,
+		ConfigModule.forRoot({
+			envFilePath: `${process.cwd()}/.env.${'dev'}`,
+			load: [configuration],
+			isGlobal: true,
+		}),
 	],
 	controllers: [AppController],
 	providers: [AppService],

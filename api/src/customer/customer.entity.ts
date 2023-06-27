@@ -17,7 +17,7 @@ export class Customer {
 	@PrimaryGeneratedColumn()
 	id: number;
 
-	@Column(() => Account)
+	@Column(() => Account, { prefix: false })
 	account: Account;
 
 	@Column({
@@ -40,7 +40,7 @@ export class Customer {
 	@Column()
 	career: string;
 
-	@Column(() => DateColumn)
+	@Column(() => DateColumn, { prefix: false })
 	dateColumn: DateColumn;
 
 	@ManyToMany(() => Evento, (evento) => evento.customers)

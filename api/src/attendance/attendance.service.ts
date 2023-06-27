@@ -12,9 +12,6 @@ export class AttendanceService {
 	constructor(
 		@InjectRepository(Attendance)
 		private attendanceRepository: Repository<Attendance>,
-		private customerService: CustomerService,
-		private labService: LabService,
-		private eventService: EventService,
 	) {}
 
 	findAll(): Promise<Attendance[]> {
@@ -27,21 +24,21 @@ export class AttendanceService {
 
 	async create(attedance: CreateAttendanceDto): Promise<any> {
 		const createdAttendance = this.attendanceRepository.create();
-		const customer = await this.customerService.findOne(attedance.customerId);
-		if (customer === null)
-			return new HttpException('El Visitante no existe', HttpStatus.NOT_FOUND);
-		const lab = await this.labService.findOne(attedance.labId);
-		if (lab === null)
-			return new HttpException(
-				'El Laboratorio no existe',
-				HttpStatus.NOT_FOUND,
-			);
-		createdAttendance.lab = lab;
-		if (!attedance.eventId) attedance.eventId = 1;
-		const event = await this.eventService.findOne(attedance.eventId);
-		if (event === null)
-			return new HttpException('El Evento no existe', HttpStatus.NOT_FOUND);
-		createdAttendance.event = event;
+		// const customer = await this.customerService.findOne(attedance.customerId);
+		// if (customer === null)
+		// 	return new HttpException('El Visitante no existe', HttpStatus.NOT_FOUND);
+		// const lab = await this.labService.findOne(attedance.labId);
+		// if (lab === null)
+		// 	return new HttpException(
+		// 		'El Laboratorio no existe',
+		// 		HttpStatus.NOT_FOUND,
+		// 	);
+		// createdAttendance.lab = lab;
+		// if (!attedance.eventId) attedance.eventId = 1;
+		// const event = await this.eventService.findOne(attedance.eventId);
+		// if (event === null)
+		// 	return new HttpException('El Evento no existe', HttpStatus.NOT_FOUND);
+		// createdAttendance.event = event;
 		return this.attendanceRepository.save(createdAttendance);
 	}
 }
