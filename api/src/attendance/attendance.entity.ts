@@ -20,7 +20,7 @@ export class Attendance {
 	@Generated('uuid')
 	checkCode: string;
 
-	@Column(() => DateColumn)
+	@Column(() => DateColumn, { prefix: false })
 	dateColumn: DateColumn;
 
 	@ManyToOne(() => Customer, (customer) => customer.attendances)

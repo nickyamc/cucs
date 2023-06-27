@@ -25,7 +25,7 @@ export class Evento {
 	@Column()
 	location: string;
 
-	@Column(() => DateColumn)
+	@Column(() => DateColumn, { prefix: false })
 	dateColumn: DateColumn;
 
 	@ManyToMany(() => Lab, (lab) => lab.events)
