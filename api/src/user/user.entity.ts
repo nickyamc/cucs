@@ -6,7 +6,7 @@ import {
 	PrimaryGeneratedColumn,
 } from 'typeorm';
 import { UserRole } from './enums';
-import { DateColumn } from 'src/entities/dateColumn.entity';
+import { DateRecord } from 'src/entities/dateRecord.entity';
 import { Account } from 'src/entities/account.entity';
 import { Lab } from 'src/lab/lab.entity';
 
@@ -31,17 +31,17 @@ export class User {
 	@Column()
 	denomination: string;
 
-	@Column({ type: 'date' })
+	@Column({ type: 'date', nullable: true })
 	birthdate: Date;
 
-	// @Column({ name: 'lab_id' })
-	// labId: number;
+	@Column({ name: 'lab_id' })
+	labId: number;
 
 	@Column({ name: 'is_active', default: false })
 	isActive: boolean;
 
-	@Column(() => DateColumn, { prefix: false })
-	dateColumn: DateColumn;
+	@Column(() => DateRecord, { prefix: false })
+	dateRecord: DateRecord;
 
 	@ManyToOne(() => Lab, (lab) => lab.users)
 	@JoinColumn({ name: 'lab_id' })

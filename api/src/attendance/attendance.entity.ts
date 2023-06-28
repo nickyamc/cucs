@@ -1,5 +1,5 @@
 import { Customer } from 'src/customer/customer.entity';
-import { DateColumn } from 'src/entities/dateColumn.entity';
+import { DateRecord } from 'src/entities/dateRecord.entity';
 import { Evento } from 'src/event/event.entity';
 import { Lab } from 'src/lab/lab.entity';
 import {
@@ -20,8 +20,8 @@ export class Attendance {
 	@Generated('uuid')
 	checkCode: string;
 
-	@Column(() => DateColumn, { prefix: false })
-	dateColumn: DateColumn;
+	@Column(() => DateRecord, { prefix: false })
+	dateRecord: DateRecord;
 
 	@ManyToOne(() => Customer, (customer) => customer.attendances)
 	@JoinColumn({ name: 'customer_id' })

@@ -1,5 +1,5 @@
 import { Attendance } from 'src/attendance/attendance.entity';
-import { DateColumn } from 'src/entities/dateColumn.entity';
+import { DateRecord } from 'src/entities/dateRecord.entity';
 import { Evento } from 'src/event/event.entity';
 import { User } from 'src/user/user.entity';
 import {
@@ -26,8 +26,8 @@ export class Lab {
 	@Generated('uuid')
 	qrCode: string;
 
-	@Column(() => DateColumn, { prefix: false })
-	dateColumn: DateColumn;
+	@Column(() => DateRecord, { prefix: false })
+	dateRecord: DateRecord;
 
 	@OneToMany(() => User, (user) => user.lab)
 	users: User[];

@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Lab } from 'src/lab/lab.entity';
+import { RelationsUserDto } from './dto/relations-user.dto';
 
 @Injectable()
 export class UserService {
@@ -13,26 +14,25 @@ export class UserService {
 		@InjectRepository(Lab) private labRepository: Repository<Lab>,
 	) {}
 
-	findAll(): Promise<User[]> {
-		return this.userRepository.find();
+	findAll(query: RelationsUserDto): Promise<User[]> {
+		return this.userRepository.find({
+			relations: {
+				...query,
+			},
+		});
 	}
 
-	findOne(id: number): Promise<User | null> {
-		return this.userRepository.findOneBy({ id });
+	findOneById(id: number, query: RelationsUserDto): Promise<User | null> {
+		return this.userRepository.findOne({
+			where: { id },
+			relations: {
+				...query,
+			},
+		});
 	}
 
-	async create(
-		user: CreateUserDto,
-		labId: number,
-	): Promise<User | HttpException> {
+	async create(user: CreateUserDto): Promise<User | HttpException> {
 		const newUser = this.userRepository.create(user);
-		const lab = await this.labRepository.findOneBy({ id: labId });
-		if (lab === null)
-			return new HttpException(
-				'El Laboratorio no existe.',
-				HttpStatus.NOT_FOUND,
-			);
-		newUser.lab = lab;
 		return this.userRepository.save(newUser);
 	}
 

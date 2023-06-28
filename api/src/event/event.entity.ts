@@ -1,6 +1,6 @@
 import { Attendance } from 'src/attendance/attendance.entity';
 import { Customer } from 'src/customer/customer.entity';
-import { DateColumn } from 'src/entities/dateColumn.entity';
+import { DateRecord } from 'src/entities/dateRecord.entity';
 import { Lab } from 'src/lab/lab.entity';
 import {
 	Column,
@@ -25,8 +25,8 @@ export class Evento {
 	@Column()
 	location: string;
 
-	@Column(() => DateColumn, { prefix: false })
-	dateColumn: DateColumn;
+	@Column(() => DateRecord, { prefix: false })
+	dateRecord: DateRecord;
 
 	@ManyToMany(() => Lab, (lab) => lab.events)
 	@JoinTable({

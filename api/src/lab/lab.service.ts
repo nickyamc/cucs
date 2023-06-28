@@ -4,17 +4,34 @@ import { Lab } from './lab.entity';
 import { Repository } from 'typeorm';
 import { CreateLabDto } from './dto/create-lab.dto';
 import { UpdateLabDto } from './dto/update-lb.dto';
+import { EventService } from 'src/event/event.service';
+import { RelationsLabDto } from './dto/relations-lab.dto';
 
 @Injectable()
 export class LabService {
-	constructor(@InjectRepository(Lab) private labRepository: Repository<Lab>) {}
+	constructor(
+		@InjectRepository(Lab) private labRepository: Repository<Lab>,
+		private eventService: EventService,
+	) {}
 
-	findAll(): Promise<Lab[]> {
-		return this.labRepository.find();
+	findAll(relations: RelationsLabDto): Promise<Lab[]> {
+		return this.labRepository.find({
+			relations: {
+				...relations,
+			},
+		});
 	}
 
-	findOne(id: number): Promise<Lab> {
-		return this.labRepository.findOneBy({ id });
+	findOne(id: number, relations: RelationsLabDto): Promise<Lab> {
+		return this.labRepository.findOne({
+			where: { id },
+			relations: { ...relations },
+		});
+	}
+
+	async findOneOrFail(id: number) {
+		const lab = await this.findOne(id, {}); //this.labRepository.findOneBy({ id });
+		if (!lab) throw new Error();
 	}
 
 	async create(lab: CreateLabDto): Promise<Lab> {

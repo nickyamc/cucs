@@ -7,7 +7,7 @@ import {
 	PrimaryGeneratedColumn,
 } from 'typeorm';
 import { CustomerType } from './enums';
-import { DateColumn } from 'src/entities/dateColumn.entity';
+import { DateRecord } from 'src/entities/dateRecord.entity';
 import { Account } from 'src/entities/account.entity';
 import { Evento } from 'src/event/event.entity';
 import { Attendance } from 'src/attendance/attendance.entity';
@@ -40,8 +40,8 @@ export class Customer {
 	@Column()
 	career: string;
 
-	@Column(() => DateColumn, { prefix: false })
-	dateColumn: DateColumn;
+	@Column(() => DateRecord, { prefix: false })
+	dateRecord: DateRecord;
 
 	@ManyToMany(() => Evento, (evento) => evento.customers)
 	events: Evento[];

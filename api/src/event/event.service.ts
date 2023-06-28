@@ -4,6 +4,7 @@ import { Evento } from './event.entity';
 import { Repository } from 'typeorm';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
+import { RelationsEventDto } from './dto/relations-event.dto';
 
 @Injectable()
 export class EventService {
@@ -11,12 +12,21 @@ export class EventService {
 		@InjectRepository(Evento) private eventRepository: Repository<Evento>,
 	) {}
 
-	findAll(): Promise<Evento[]> {
-		return this.eventRepository.find();
+	findAll(query: RelationsEventDto): Promise<Evento[]> {
+		return this.eventRepository.find({
+			relations: {
+				...query,
+			},
+		});
 	}
 
-	findOne(id: number): Promise<Evento | null> {
-		return this.eventRepository.findOneBy({ id });
+	findOneById(id: number, query: RelationsEventDto): Promise<Evento | null> {
+		return this.eventRepository.findOne({
+			where: { id },
+			relations: {
+				...query,
+			},
+		});
 	}
 
 	async create(event: CreateEventDto): Promise<Evento> {
