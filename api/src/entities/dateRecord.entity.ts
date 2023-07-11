@@ -1,6 +1,6 @@
 import { CreateDateColumn, DeleteDateColumn, UpdateDateColumn } from 'typeorm';
 
-export class DateColumn {
+export class DateRecord {
 	@CreateDateColumn({ name: 'created_at' })
 	createdAt: Date;
 

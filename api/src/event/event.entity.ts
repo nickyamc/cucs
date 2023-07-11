@@ -1,11 +1,10 @@
 import { Attendance } from 'src/attendance/attendance.entity';
 import { Customer } from 'src/customer/customer.entity';
-import { DateColumn } from 'src/entities/dateColumn.entity';
+import { DateRecord } from 'src/entities/dateRecord.entity';
 import { Lab } from 'src/lab/lab.entity';
 import {
 	Column,
 	Entity,
-	JoinTable,
 	ManyToMany,
 	OneToMany,
 	PrimaryGeneratedColumn,
@@ -25,31 +24,13 @@ export class Evento {
 	@Column()
 	location: string;
 
-	@Column(() => DateColumn, { prefix: false })
-	dateColumn: DateColumn;
+	@Column(() => DateRecord, { prefix: false })
+	dateRecord: DateRecord;
 
 	@ManyToMany(() => Lab, (lab) => lab.events)
-	@JoinTable({
-		name: 'event_lab',
-		joinColumn: {
-			name: 'event_id',
-		},
-		inverseJoinColumn: {
-			name: 'lab_id',
-		},
-	})
 	labs: Lab[];
 
 	@ManyToMany(() => Customer, (customer) => customer.events)
-	@JoinTable({
-		name: 'event_customer',
-		joinColumn: {
-			name: 'event_id',
-		},
-		inverseJoinColumn: {
-			name: 'customer_id',
-		},
-	})
 	customers: Customer[];
 
 	@OneToMany(() => Attendance, (attendance) => attendance.event)

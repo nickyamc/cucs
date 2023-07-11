@@ -1,32 +1,4 @@
-import {
-	IsString,
-	IsEmail,
-	IsPhoneNumber,
-	Max,
-	IsOptional,
-} from 'class-validator';
+import { PartialType } from '@nestjs/swagger';
+import { CreateAccountDto } from './create-account.dto';
 
-export class UpdateAccountDto {
-	@IsOptional()
-	@IsEmail()
-	email?: string;
-
-	@IsOptional()
-	@IsString()
-	@Max(15)
-	username?: string;
-
-	@IsOptional()
-	@IsString()
-	@Max(255)
-	firstName?: string;
-
-	@IsOptional()
-	@IsString()
-	@Max(255)
-	lastName?: string;
-
-	@IsOptional()
-	@IsPhoneNumber('PE')
-	phone?: string;
-}
+export class UpdateAccountDto extends PartialType(CreateAccountDto) {}
