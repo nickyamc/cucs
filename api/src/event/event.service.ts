@@ -1,10 +1,11 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Evento } from './event.entity';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
 import { RelationsEventDto } from './dto/relations-event.dto';
+import e from 'express';
 
 @Injectable()
 export class EventService {
@@ -12,21 +13,24 @@ export class EventService {
 		@InjectRepository(Evento) private eventRepository: Repository<Evento>,
 	) {}
 
-	findAll(query: RelationsEventDto): Promise<Evento[]> {
-		return this.eventRepository.find({
-			relations: {
-				...query,
-			},
+	async findAll(relations: RelationsEventDto): Promise<Evento[]> {
+		const events = await this.eventRepository.find({
+			relations,
 		});
+		return events;
 	}
 
-	findOneById(id: number, query: RelationsEventDto): Promise<Evento | null> {
-		return this.eventRepository.findOne({
+	async findOneById(id: number, relations: RelationsEventDto): Promise<Evento> {
+		const event = await this.eventRepository.findOne({
 			where: { id },
-			relations: {
-				...query,
-			},
+			relations,
 		});
+		return event;
+	}
+
+	async findAllOrFail(ids: number[]) {
+		const events = await this.eventRepository.findBy({ id: In(ids) });
+		if (events.length === 0) throw new Error();
 	}
 
 	async create(event: CreateEventDto): Promise<Evento> {

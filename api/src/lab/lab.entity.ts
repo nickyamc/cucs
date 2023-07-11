@@ -6,9 +6,11 @@ import {
 	Column,
 	Entity,
 	Generated,
+	JoinTable,
 	ManyToMany,
 	OneToMany,
 	PrimaryGeneratedColumn,
+	RelationId,
 } from 'typeorm';
 
 @Entity({ name: 'lab' })
@@ -29,12 +31,24 @@ export class Lab {
 	@Column(() => DateRecord, { prefix: false })
 	dateRecord: DateRecord;
 
-	@OneToMany(() => User, (user) => user.lab)
+	@RelationId((lab: Lab) => lab.events)
+	eventIds: number[];
+
+	@OneToMany(() => User, (user: User) => user.lab)
 	users: User[];
 
-	@ManyToMany(() => Evento, (evento) => evento.labs)
+	@ManyToMany(() => Evento, (event: Evento) => event.labs, { cascade: true })
+	@JoinTable({
+		name: 'lab_event',
+		joinColumn: {
+			name: 'lab_id',
+		},
+		inverseJoinColumn: {
+			name: 'event_id',
+		},
+	})
 	events: Evento[];
 
-	@OneToMany(() => Attendance, (attendance) => attendance.lab)
+	@OneToMany(() => Attendance, (attendance: Attendance) => attendance.lab)
 	attendances: Attendance[];
 }

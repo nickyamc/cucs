@@ -23,6 +23,15 @@ export class Attendance {
 	@Column(() => DateRecord, { prefix: false })
 	dateRecord: DateRecord;
 
+	@Column({ name: 'customer_id' })
+	customerId: number;
+
+	@Column({ name: 'lab_id' })
+	labId: number;
+
+	@Column({ name: 'event_id' })
+	eventId: number;
+
 	@ManyToOne(() => Customer, (customer) => customer.attendances)
 	@JoinColumn({ name: 'customer_id' })
 	customer: Customer;

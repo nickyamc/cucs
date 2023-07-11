@@ -2,9 +2,11 @@ import {
 	Column,
 	Entity,
 	Generated,
+	JoinTable,
 	ManyToMany,
 	OneToMany,
 	PrimaryGeneratedColumn,
+	RelationId,
 } from 'typeorm';
 import { CustomerType } from './enums';
 import { DateRecord } from 'src/entities/dateRecord.entity';
@@ -40,10 +42,22 @@ export class Customer {
 	@Column()
 	career: string;
 
+	@RelationId((customer: Customer) => customer.events)
+	eventIds: number[];
+
 	@Column(() => DateRecord, { prefix: false })
 	dateRecord: DateRecord;
 
-	@ManyToMany(() => Evento, (evento) => evento.customers)
+	@ManyToMany(() => Evento, (evento) => evento.customers, { cascade: true })
+	@JoinTable({
+		name: 'customer_event',
+		joinColumn: {
+			name: 'customer_id',
+		},
+		inverseJoinColumn: {
+			name: 'event_id',
+		},
+	})
 	events: Evento[];
 
 	@OneToMany(() => Attendance, (attendance) => attendance.customer)

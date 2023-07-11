@@ -7,10 +7,17 @@ import { Evento } from 'src/event/event.entity';
 import { Lab } from './lab.entity';
 import { Attendance } from 'src/attendance/attendance.entity';
 import { EventService } from 'src/event/event.service';
+import { LabExist } from './validation/IsLabAlreadyExist.validation';
+import { IsCodeAlreadyExistConstrainst } from './validation/IsDuplicateCode.validation';
 
 @Module({
 	imports: [TypeOrmModule.forFeature([Lab, User, Evento, Attendance])],
-	providers: [LabService, EventService],
+	providers: [
+		LabService,
+		EventService,
+		LabExist,
+		IsCodeAlreadyExistConstrainst,
+	],
 	controllers: [LabController],
 })
 export class LabModule {}

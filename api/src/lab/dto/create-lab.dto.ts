@@ -1,5 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString, Length } from 'class-validator';
+import {
+	ArrayMinSize,
+	IsArray,
+	IsInt,
+	IsNotEmpty,
+	IsString,
+	Length,
+} from 'class-validator';
+import { IsEventsExist } from 'src/event/decorator/IsEventsExist.decorator';
+import { IsDuplicateCode } from '../decorator/IsDuplicateCode.decorator';
 
 export class CreateLabDto {
 	@ApiProperty({
@@ -13,6 +22,7 @@ export class CreateLabDto {
 		message:
 			'El código sunedu del laboratorio debe tener entre 3 y 20 caracteres.',
 	})
+	@IsDuplicateCode()
 	suneduCode: string;
 
 	@ApiProperty({
@@ -27,4 +37,22 @@ export class CreateLabDto {
 			'La ubicación del laboratorio debe tener entre 1 y 255 caracteres.',
 	})
 	location: string;
+
+	@ApiProperty({
+		description:
+			'Array de ids de los eventos a los que pertenece el laboratorio.',
+		type: [Number],
+		required: true,
+	})
+	@IsNotEmpty()
+	@IsArray()
+	@IsInt({
+		each: true,
+		message: 'El id del evento debe ser un número.',
+	})
+	@ArrayMinSize(1, {
+		message: 'El laboratorio debe pertenecer a al menos un evento.',
+	})
+	@IsEventsExist()
+	eventIds: number[];
 }

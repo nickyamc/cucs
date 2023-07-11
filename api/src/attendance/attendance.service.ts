@@ -1,11 +1,10 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Attendance } from './attendance.entity';
-import { Repository } from 'typeorm';
-import { CustomerService } from 'src/customer/customer.service';
+import { Between, Repository } from 'typeorm';
 import { CreateAttendanceDto } from './dto/create-attendance.dto';
-import { LabService } from 'src/lab/lab.service';
-import { EventService } from 'src/event/event.service';
+import { RelationsAttendanceDto } from './dto/relations-attendance.sto';
+import { QueryAttendanceDto } from './dto/query-attendance.dto';
 
 @Injectable()
 export class AttendanceService {
@@ -14,31 +13,95 @@ export class AttendanceService {
 		private attendanceRepository: Repository<Attendance>,
 	) {}
 
-	findAll(): Promise<Attendance[]> {
-		return this.attendanceRepository.find();
-	}
-
-	findOne(id: number): Promise<Attendance | null> {
-		return this.attendanceRepository.findOneBy({ id });
-	}
-
 	async create(attedance: CreateAttendanceDto): Promise<any> {
-		const createdAttendance = this.attendanceRepository.create();
-		// const customer = await this.customerService.findOne(attedance.customerId);
-		// if (customer === null)
-		// 	return new HttpException('El Visitante no existe', HttpStatus.NOT_FOUND);
-		// const lab = await this.labService.findOne(attedance.labId);
-		// if (lab === null)
-		// 	return new HttpException(
-		// 		'El Laboratorio no existe',
-		// 		HttpStatus.NOT_FOUND,
-		// 	);
-		// createdAttendance.lab = lab;
-		// if (!attedance.eventId) attedance.eventId = 1;
-		// const event = await this.eventService.findOne(attedance.eventId);
-		// if (event === null)
-		// 	return new HttpException('El Evento no existe', HttpStatus.NOT_FOUND);
-		// createdAttendance.event = event;
+		const createdAttendance = this.attendanceRepository.create(attedance);
 		return this.attendanceRepository.save(createdAttendance);
+	}
+
+	async findAllByCustomerId(
+		customerId: number,
+		query: QueryAttendanceDto,
+	): Promise<Attendance[]> {
+		const attendaces = await this.attendanceRepository.find({
+			where: {
+				customerId,
+				dateRecord: {
+					createdAt: Between(
+						query.startDate ? query.startDate : new Date('1900-01-01'),
+						query.endDate ? query.endDate : new Date(),
+					),
+				},
+			},
+			relations: {
+				customer: this.customBoolean(query.customer, true),
+				lab: this.customBoolean(query.lab, false),
+				event: this.customBoolean(query.event, false),
+			},
+		});
+		return attendaces;
+	}
+
+	customBoolean(value: boolean | undefined, v: boolean): boolean {
+		return value === undefined ? v : value;
+	}
+
+	async findAllByLabId(
+		labId: number,
+		query: QueryAttendanceDto,
+	): Promise<Attendance[]> {
+		const attendaces = await this.attendanceRepository.find({
+			where: {
+				labId,
+				dateRecord: {
+					createdAt: Between(
+						query.startDate ? query.startDate : new Date('1900-01-01'),
+						query.endDate ? query.endDate : new Date(),
+					),
+				},
+			},
+			relations: {
+				customer: this.customBoolean(query.customer, false),
+				lab: this.customBoolean(query.lab, true),
+				event: this.customBoolean(query.event, false),
+			},
+		});
+		return attendaces;
+	}
+
+	async findAllByEventId(
+		eventId: number,
+		query: QueryAttendanceDto,
+	): Promise<Attendance[]> {
+		const attendaces = await this.attendanceRepository.find({
+			where: { eventId },
+			relations: {
+				customer: this.customBoolean(query.customer, false),
+				lab: this.customBoolean(query.lab, false),
+				event: this.customBoolean(query.event, true),
+			},
+		});
+		return attendaces;
+	}
+
+	async findOneById(
+		id: number,
+		relations: RelationsAttendanceDto,
+	): Promise<Attendance | null> {
+		const attendaces = await this.attendanceRepository.findOne({
+			where: { id },
+			relations,
+		});
+		return attendaces;
+	}
+
+	async findOneByCheckCode(
+		checkCode: string,
+		relations: RelationsAttendanceDto,
+	): Promise<Attendance | null> {
+		const attendaces = await this.attendanceRepository.findOne({
+			where: { checkCode },
+			relations,
+		});
+		return attendaces;
 	}
 }

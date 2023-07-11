@@ -1,14 +1,14 @@
 import { ValidationOptions, registerDecorator } from 'class-validator';
-import { LabExist } from '../validation/lab-exist.validation';
+import { IsDuplicateCodeConstraints } from '../validation/IsDuplicateCode.validation';
 
-export function IsLabExist(validationOptions?: ValidationOptions) {
+export function IsDuplicateCode(validationOptions?: ValidationOptions) {
 	return function (object: any, propertyName: string) {
 		registerDecorator({
-			name: 'IsLabExist',
+			name: 'IsDuplicateCode',
 			target: object.constructor,
 			propertyName: propertyName,
 			options: validationOptions,
-			validator: LabExist,
+			validator: IsDuplicateCodeConstraints,
 		});
 	};
 }

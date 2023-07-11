@@ -18,6 +18,11 @@ import configuration from './config/configuration';
 
 @Module({
 	imports: [
+		ConfigModule.forRoot({
+			envFilePath: `${process.cwd()}/.env.${'dev'}`,
+			load: [configuration],
+			isGlobal: true,
+		}),
 		TypeOrmModule.forRootAsync({
 			imports: [ConfigModule],
 			useFactory: async (configureService: ConfigService) => ({
@@ -39,11 +44,6 @@ import configuration from './config/configuration';
 		CustomerModule,
 		AuthModule,
 		AttendanceModule,
-		ConfigModule.forRoot({
-			envFilePath: `${process.cwd()}/.env.${'dev'}`,
-			load: [configuration],
-			isGlobal: true,
-		}),
 	],
 	controllers: [AppController],
 	providers: [AppService],

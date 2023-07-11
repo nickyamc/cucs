@@ -5,7 +5,6 @@ import { Lab } from 'src/lab/lab.entity';
 import {
 	Column,
 	Entity,
-	JoinTable,
 	ManyToMany,
 	OneToMany,
 	PrimaryGeneratedColumn,
@@ -29,27 +28,9 @@ export class Evento {
 	dateRecord: DateRecord;
 
 	@ManyToMany(() => Lab, (lab) => lab.events)
-	@JoinTable({
-		name: 'event_lab',
-		joinColumn: {
-			name: 'event_id',
-		},
-		inverseJoinColumn: {
-			name: 'lab_id',
-		},
-	})
 	labs: Lab[];
 
 	@ManyToMany(() => Customer, (customer) => customer.events)
-	@JoinTable({
-		name: 'event_customer',
-		joinColumn: {
-			name: 'event_id',
-		},
-		inverseJoinColumn: {
-			name: 'customer_id',
-		},
-	})
 	customers: Customer[];
 
 	@OneToMany(() => Attendance, (attendance) => attendance.event)

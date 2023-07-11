@@ -15,7 +15,7 @@ import { CreateAccountDto } from 'src/entities/dto/create-account.dto';
 import { UserRole } from '../enums';
 import { Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsLabExist } from 'src/lab/decorator/IsLabExist.decorator';
+import { IsLabAlreadyExist } from 'src/lab/decorator/IsLabAlreadyExist.decorator';
 
 export class CreateUserDto {
 	@ApiProperty({ type: CreateAccountDto })
@@ -71,6 +71,6 @@ export class CreateUserDto {
 	@IsNotEmpty()
 	@IsInt()
 	@IsPositive()
-	@IsLabExist()
+	@IsLabAlreadyExist()
 	labId: number;
 }
